@@ -4,9 +4,8 @@
 use strict;
 use warnings;
 use Getopt::Long;
-
 use Net::DNS;
-use Data::Dumper;
+
 BEGIN { $" = ',' }
 
 sub usage {

@@ -6,7 +6,6 @@ BEGIN { $|++ }
 use strict;
 use warnings;
 use Net::DNS;
-use Data::Dumper;
 
 my $hostname = shift or die <<EOF;
 Checks DNS zone configuration against best practices, including RFC 1912.

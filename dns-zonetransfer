@@ -4,7 +4,6 @@
 use strict;
 use warnings;
 use Net::DNS;
-use Data::Dumper;
 
 my $hostname = shift or die <<EOF;
 Requests a zone transfer (AXFR) from a DNS servers.
