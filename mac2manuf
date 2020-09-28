@@ -1,0 +1,15 @@
+#!/usr/bin/perl
+# Find the manufacturer by MAC address.
+
+$mac = shift;
+die "Find the manufacturer by MAC.\nusage: $0 <MAC>\n" unless $mac;
+
+@oct = split /:/, $mac;
+$oui = '/etc/aircrack-ng/oui.txt';
+
+die "missing $oui: run airodump-ng-oui-update!"
+	unless -f $oui;
+
+open OUI, $oui;
+/$oct[0]-$oct[1]-$oct[2] /i and print while <OUI>;
+close OUI;
