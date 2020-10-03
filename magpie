@@ -1,0 +1,53 @@
+#!/bin/sh
+# Find LEAP/MSCHAPv2/PPP/PPTP/RADIUS sensitive data in pcap files.
+# (c) volgk, github.com/volgk
+if [ -z $1 ]; then
+	cat <<EOF
+Find LEAP/MSCHAPv2/PPP/PPTP/RADIUS sensitive data in pcap files.
+Usage: $(basename $0) file.cap
+EOF
+	return
+fi
+
+prettify() {
+	perl -alne '
+	next if "@F" eq "[]";
+	$F[1]=~s/(..)/$1:/g;
+	chop $F[1];
+	print "$F[0] => $F[1]";
+	'
+}
+
+echo "Searching LEAP data..."
+tshark  -r $1 -Tfields             \
+	-e eap.leap.name           \
+	-e eap.leap.peer_challenge \
+	-e eap.leap.peer_response  \
+	"eap.leap.peer_challenge || eap.leap.peer_response" \
+	| prettify
+
+echo "Searching MSCHAPv2 data..."
+tshark  -r $1 -Tfields \
+	-e chap.name   \
+	-e chap.value  \
+	-e chap.value  \
+	"chap.code == 1 || chap.code == 2" \
+	| prettify
+
+echo "Searching PPP data (user|index|challenge)..."
+tshark  -r $1 -Tfields     \
+	-e chap.name       \
+	-e chap.identifier \
+	-e chap.value      \
+	"chap.code == 2 || chap.code == 1"
+
+echo "Searching RADIUS data (code|id|length|response|authenticator|attributes)"
+tshark  -r $1 -Tfields \
+	-e radius.code          \
+	-e radius.id            \
+	-e radius.length        \
+	-e radius.authenticator \
+	-e radius.State         \
+	"radius"
+
+# End of file
