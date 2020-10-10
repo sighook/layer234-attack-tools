@@ -1,3 +1,0 @@
-#!/usr/bin/perl -ln
-print for /(\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b)/g;
-
