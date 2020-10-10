@@ -1,0 +1,15 @@
+#!/usr/bin/perl -ln
+# Convert karma stdout passwords list to dictionary.
+# (c) chinarulezzz
+
+next unless m!^\|(.*)\|(.*)\|$!;
+$mail = $1;
+$pass = $2;
+
+# trim
+s/^\s+//, s/\s+$// for $mail, $pass;
+
+next if $mail eq 'Email' and $pass eq 'Password';
+next if $mail eq 'donate@btc.thx';
+
+print $pass;
