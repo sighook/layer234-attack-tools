@@ -10,12 +10,10 @@ from scapy.all import *
 # Maybe get a cheap throwaway domain and add your own A records.
 names = ['irc.efnet.net', 'irc.dal.net', 'irc.undernet.org', 'irc.freenode.net']
 
-iface = get_working_if()
-
 parser = argparse.ArgumentParser(add_help=True,
     description='Test your DNS server against amplification DDoS Attack')
 
-parser.add_argument('-i', help='interface name', default=iface)
+parser.add_argument('-i', help='interface name', default=get_working_if())
 parser.add_argument('-v', help='IP address of the victim')
 parser.add_argument('-t', help='IP address of the misconfigured DNS')
 parser.add_argument('-c', help='count of packets to sent')
