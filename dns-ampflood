@@ -28,7 +28,7 @@ if __name__=='__main__':
     parser = argparse.ArgumentParser(add_help=True,
         description='Test your DNS server against amplification DDoS Attack')
 
-    parser.add_argument('-i', default=get_working_if(),
+    parser.add_argument('-i', default=interface,
                               help=f"interface name ({interface})")
 
     parser.add_argument('-a', help='the IP address of the victim')
