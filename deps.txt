@@ -1,0 +1,5 @@
+scapy
+p5-net-dns
+nmap
+wireshark
+p5-xml-simple
