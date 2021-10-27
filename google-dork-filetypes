@@ -1,0 +1,17 @@
+#!/usr/bin/env perl
+
+@exts = qw(pdf doc xls ppt odp ods docx xlsx pptx);
+
+$usage = <<EOF;
+Search Google for specific filetype.
+Usage: $0 DOMAIN
+EOF
+
+$domain = shift or die $usage;
+
+print $usage and exit(0) if $domain =~ /^(-h|--help)$/;
+
+`xdg-open "https://www.google.com/search?q=site:$domain filetype:$_"`
+  for @exts;
+
+# End of file.
