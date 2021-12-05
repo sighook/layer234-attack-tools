@@ -5,7 +5,7 @@ $mac = shift;
 die "Find the manufacturer by MAC.\nusage: $0 <MAC>\n" unless $mac;
 
 @oct = split /:/, $mac;
-$oui = '/etc/aircrack-ng/oui.txt';
+$oui = '/etc/aircrack-ng/airodump-ng-oui.txt';
 
 die "missing $oui: run airodump-ng-oui-update!"
 	unless -f $oui;
