@@ -1,20 +1,30 @@
 #!/usr/bin/perl
-# dump aircrack's netxml output in pretty format.
-# (c) chinarulezzz.
+# Dump aircrack's netxml output in pretty format.
+# (c) chinarulezzz
 use strict;
 use warnings; no warnings 'uninitialized';
 #use diagnostics;
 use XML::Simple;
 
+BEGIN {
+    if ($^O eq 'linux') {
+        my $cols = `tput cols`;
+        die "$0 requires 165 columns for the current terminal!\n"
+            if $cols < 165;
+    }
+}
+
 die "usage: $0 file.netxml\n"
     if !scalar(@ARGV) || $ARGV[0] =~ /^--?(h|help)$/;
 
 my $has_wireless_clients = 0;
+my $networks_total = 0;
 my $xml  = XML::Simple->new;
 my $data = $xml->XMLin($ARGV[0]);
 
 print <<"EOH";
-FREQMHZ   | CH   | BSSID               | ESSID                           | ENCRYPTION                     | MANUFACTURER
+╔═══════════╦══════╦═════════════════════╦═════════════════════════════════╦════════════════════════════════╦═════════════════════════════════════════════════════╗
+║ FREQMHZ   ║ CH   ║ BSSID               ║ ESSID                           ║ ENCRYPTION                     ║ MANUFACTURER                                        ║
 EOH
 
 for my $network (@{ $data->{'wireless-network'} }) {
@@ -25,15 +35,25 @@ for my $network (@{ $data->{'wireless-network'} }) {
     my $encryption   = ref $network->{SSID}->{encryption} ? "@{ $network->{SSID}->{encryption} }" : '';
     my $manuf        = $network->{manuf};
 
+    if ($has_wireless_clients) {
+        print <<EOF;
+╠═══════════╦══════╬═════════════════════╬═════════════════════════════════╬════════════════════════════════╬═════════════════════════════════════════════════════╣
+EOF
+    } else {
+        print <<EOF;
+╠═══════════╬══════╬═════════════════════╬═════════════════════════════════╬════════════════════════════════╬═════════════════════════════════════════════════════╣
+EOF
+    }
+
     format AP =
-@<<<<<<<< | @<<< | @<<<<<<<<<<<<<<<<<< | @<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< | @<<<<<<<<<<<<<<<<<<<<<<<<<<<<< | @<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-$freqmhz,   $chan, $bssid,               $essid,                           $encryption,                     $manuf
+║ @<<<<<<<< ║ @<<< ║ @<<<<<<<<<<<<<<<<<< ║ @<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ║ @<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ║ @<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ║
+  $freqmhz,   $chan, $bssid,               $essid,                           $encryption,                     $manuf
 .
 
     $~ = 'AP';
 
     if (ref $network->{'wireless-client'}) {
-        print "\n" unless $has_wireless_clients;
+        print "" unless $has_wireless_clients;
         write;
     } else {
         $has_wireless_clients = 0;
@@ -41,7 +61,9 @@ $freqmhz,   $chan, $bssid,               $essid,                           $encr
     }
 
     print <<EOH;
-                 | CLIENT_MAC          | SSID_PROBES                     | CARRIER                        |
+╠═══════════╩══════╬═════════════════════╬═════════════════════════════════╬════════════════════════════════╬═════════════════════════════════════════════════════╣
+║                  ║ CLIENT_MAC          ║ SSID_PROBES                     ║ CARRIER                        ║                                                     ║
+║                  ╟─────────────────────╫─────────────────────────────────╫────────────────────────────────╫─────────────────────────────────────────────────────╢
 EOH
 
     my $clients_ref;
@@ -64,10 +86,10 @@ EOH
         my @ssids;
 
         format STA =
-                 | @<<<<<<<<<<<<<<<<<< | ^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< | @<<<<<<<<<<<<<<<<<<<<<<<<<<<<< | @<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                   $client_mac,          $ssid,                            $carrier,                        $client_manuf
-~~                                     | ^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< |
-                                         $ssid
+║                  ║ @<<<<<<<<<<<<<<<<<< ║ ^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ║ @<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ║ @<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ║
+                     $client_mac,          $ssid,                            $carrier,                        $client_manuf
+~~                                       ║ ^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ║
+                                           $ssid
 .
         $~ = 'STA';
 
@@ -81,9 +103,21 @@ EOH
 
         write;
     }
-    print "\n";
+    #print "\n";
     $has_wireless_clients = 1;
 }
 
+END {
+    if ($has_wireless_clients) {
+        print <<EOF;
+╚══════════════════╩═════════════════════╩═════════════════════════════════╩════════════════════════════════╩═════════════════════════════════════════════════════╝
+EOF
+    } else {
+        print <<EOF;
+╚═══════════╩══════╩═════════════════════╩═════════════════════════════════╩════════════════════════════════╩═════════════════════════════════════════════════════╝
+EOF
+    }
+}
+
 # vim:sw=4:ts=4:sts=4:et
-# End of file
+# End of file.
