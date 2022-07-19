@@ -1,5 +1,7 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
+#
 # Performs DNS cache snooping against a DNS server.
+#
 
 use strict;
 use warnings;
@@ -22,14 +24,15 @@ This message.
 
 -m|--mode <0|nonrecursive>
 
-Queries are sent to the server with the RD (recursion desired) flag set to 0.
-The server should respond positively to these only if it has the domain cached.
-The default mode.
+Queries are sent to the server with the RD (recursion desired) flag set
+to 0.  The server should respond positively to these only if it has the
+domain cached.  The default mode.
 
 -m|--mode <1|timed>
 
 The mean and standard deviation response times for a cached domain are
-calculated by sampling the resolution of a name (www.google.com) several times.
+calculated by sampling the resolution of a name (www.google.com)
+several times.
 
 -t|--tcp / -u|--udp
 
@@ -42,9 +45,10 @@ Connection port.
 
 -d|--domains <DOMAINS|WORDLIST>
 
-An array of domain (separated by comma) to check in place of the default list.
-The default list of domains to check consists of the top 50 most popular sites,
-each site being listed twice, once with "www." and once without.
+An array of domain (separated by comma) to check in place of the
+default list.  The default list of domains to check consists of the
+top 50 most popular sites, each site being listed twice, once with
+"www." and once without.
 
 Ex.: -d www.google.com,www.yahoo.com,google.com,yahoo.com
      -d ~/wordlist.txt
@@ -89,7 +93,8 @@ if ($OPTS{domains} && -f $OPTS{domains}) {
 # default values
 $OPTS{mode} //= 'nonrecursive';
 $OPTS{mode}   = 'nonrecursive' if $OPTS{mode} eq 0;
-$OPTS{mode}   = 'timed'        if $OPTS{mode} eq 1 || $OPTS{mode} eq 'timed';
+$OPTS{mode}   = 'timed'        if $OPTS{mode} eq 1 || \
+                                  $OPTS{mode} eq 'timed';
 $OPTS{target} = shift;
 $OPTS{port} //= 53;
 $OPTS{udp}  //= 1 unless $OPTS{tcp};
@@ -109,8 +114,11 @@ $OPTS{script_args} .= ",dns-cache-snoop.domains={$OPTS{domains}}"
 
 $OPTS{script_args} .= "'";
 
-print ">>> nmap $OPTS{args} $OPTS{script} $OPTS{script_args} $OPTS{target}\n";
-print qx( nmap $OPTS{args} $OPTS{script} $OPTS{script_args} $OPTS{target} );
+print \
+">>> nmap $OPTS{args} $OPTS{script} $OPTS{script_args} $OPTS{target}\n";
+print qx(
+    nmap $OPTS{args} $OPTS{script} $OPTS{script_args} $OPTS{target}
+);
 
-# vim:sw=4:ts=4:sts=4:et:cc=80
-# End of file
+# vim:sw=4:ts=4:sts=4:et:tw=71:cc=72
+# End of file.
