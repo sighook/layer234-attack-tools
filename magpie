@@ -1,13 +1,33 @@
 #!/bin/sh
-# Find LEAP/MSCHAPv2/PPP/PPTP/RADIUS sensitive data in pcap files.
+# Description: Find LEAP/MSCHAPv2/PPP/PPTP/RADIUS sensitive data in pcap files
+# Depends on:  perl wireshark
+#
 # (c) volgk, github.com/volgk
-if [ -z $1 ]; then
+
+usage() {
 	cat <<EOF
-Find LEAP/MSCHAPv2/PPP/PPTP/RADIUS sensitive data in pcap files.
-Usage: $(basename $0) file.cap
+Usage: ${0##*/} <file.cap>
+$(grep -Po '^# Description: \K.*' "$0").
 EOF
-	return
-fi
+}
+
+case $1 in
+-h|--help)
+	usage
+	exit 0
+	;;
+"")
+	usage
+	exit 1
+	;;
+*)
+	CAPFILE=$1
+	if [ ! -f "$CAPFILE" ]; then
+		echo "$CAPFILE not found!"
+		exit 2
+	fi
+	;;
+esac
 
 prettify() {
 	perl -alne '
@@ -19,7 +39,7 @@ prettify() {
 }
 
 echo "Searching LEAP data..."
-tshark  -r $1 -Tfields             \
+tshark  -r "$CAPFILE" -Tfields     \
 	-e eap.leap.name           \
 	-e eap.leap.peer_challenge \
 	-e eap.leap.peer_response  \
@@ -27,7 +47,7 @@ tshark  -r $1 -Tfields             \
 	| prettify
 
 echo "Searching MSCHAPv2 data..."
-tshark  -r $1 -Tfields \
+tshark  -r "$CAPFILE" -Tfields \
 	-e chap.name   \
 	-e chap.value  \
 	-e chap.value  \
@@ -35,14 +55,14 @@ tshark  -r $1 -Tfields \
 	| prettify
 
 echo "Searching PPP data (user|index|challenge)..."
-tshark  -r $1 -Tfields     \
+tshark  -r "$CAPFILE" -Tfields     \
 	-e chap.name       \
 	-e chap.identifier \
 	-e chap.value      \
 	"chap.code == 2 || chap.code == 1"
 
 echo "Searching RADIUS data (code|id|length|response|authenticator|attributes)"
-tshark  -r $1 -Tfields \
+tshark  -r "$CAPFILE" -Tfields  \
 	-e radius.code          \
 	-e radius.id            \
 	-e radius.length        \
@@ -50,4 +70,4 @@ tshark  -r $1 -Tfields \
 	-e radius.State         \
 	"radius"
 
-# End of file
+# End of file.
