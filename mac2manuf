@@ -1,15 +1,32 @@
-#!/usr/bin/perl
-# Find the manufacturer by MAC address.
+#!/usr/bin/env perl
+# Description: Find the manufacturer by MAC address
+# Depends on:  aircrack-ng
 
-$mac = shift;
-die "Find the manufacturer by MAC.\nusage: $0 <MAC>\n" unless $mac;
+use strict;
+use warnings;
+use File::Basename;
 
-@oct = split /:/, $mac;
-$oui = '/etc/aircrack-ng/airodump-ng-oui.txt';
+my $program = basename $0;
+my $arg = shift;
 
-die "missing $oui: run airodump-ng-oui-update!"
-	unless -f $oui;
+sub usage {
+    print <<EOF;
+Usage: $program MAC
+Find the manufacturer by MAC address.
+EOF
+}
 
-open OUI, $oui;
-/$oct[0]-$oct[1]-$oct[2] /i and print while <OUI>;
-close OUI;
+usage() and exit(0) if $arg && $arg =~ /^--?(h|help)$/;
+usage() and exit(1) if !$arg;
+
+my @oct = split /:/, $arg;
+my $oui = '/etc/aircrack-ng/airodump-ng-oui.txt';
+
+die "missing $oui: run airodump-ng-oui-update!\n" unless -f $oui;
+
+open(my $fh, $oui);
+/$oct[0]-$oct[1]-$oct[2] /i and print while <$fh>;
+close $fh;
+
+# vim:sw=4:ts=4:sts=4:et:tw=71:cc=72
+# End of file.
