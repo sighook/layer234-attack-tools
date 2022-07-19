@@ -5,7 +5,7 @@
 usage() {
   cat <<EOF
 Usage: ${0##*/} <host> [nmap_arg]...
-$(grep -Po '^# Description: \K.*' "$0")
+$(grep -Po '^# Description: \K.*' "$0").
 EOF
 }
 
