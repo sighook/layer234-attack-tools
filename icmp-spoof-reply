@@ -10,7 +10,7 @@
 #
 # Hint: Use arp-broadcast-spoof, Luke.
 #
-# (c) Alexandr Savca, alexandr dot savca89 at gmail dot com
+# (c) 2020 Alexandr Savca, alexandr dot savca89 at gmail dot com
 
 from scapy.all import *
 

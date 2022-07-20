@@ -2,7 +2,8 @@
 # Description: Find LEAP/MSCHAPv2/PPP/PPTP/RADIUS sensitive data in pcap files
 # Depends on:  perl wireshark
 #
-# (c) volgk, github.com/volgk
+# (c) 2020 volgk, github.com/volgk
+# (c) 2022 Alexandr Savca, alexandr dot savca89 at gmail dot com
 
 usage() {
 	cat <<EOF

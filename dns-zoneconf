@@ -1,7 +1,9 @@
 #!/usr/bin/env perl
 # Description: Checks DNS zone configuration against best practices,
-#              including RFC 1912.
+#              including RFC 1912
 # Depends on:  nmap p5-net-dns
+#
+# (c) 2020 Alexandr Savca, alexandr dot savca89 at gmail dot com
 
 BEGIN { $|++ }
 

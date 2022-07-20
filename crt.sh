@@ -1,6 +1,8 @@
 #!/usr/bin/env perl
 # Description: Get the subdomains from a HTTPS website in a few secs
 # Depends on:  p5-json
+#
+# (c) 2020 Alexandr Savca, alexandr dot savca89 at gmail dot com
 
 use strict;
 use warnings;

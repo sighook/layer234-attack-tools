@@ -1,6 +1,8 @@
 #!/usr/bin/env perl
 # Description: Perform a zone transfer
 # Depends on:  p5-net-dns
+#
+# (c) 2020 Alexandr Savca, alexandr dot savca89 at gmail dot com
 
 use strict;
 use warnings;

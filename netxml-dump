@@ -1,7 +1,8 @@
 #!/usr/bin/env perl
 # Description: Dump aircrack's netxml output in pretty format
 # Depends on:  p5-xml-simple
-# (c) Alexandr Savca, alexandr dot savca89 at gmail dot com
+#
+# (c) 2020 Alexandr Savca, alexandr dot savca89 at gmail dot com
 
 use strict;
 use warnings;

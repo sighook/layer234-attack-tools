@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # Description: Test reliability of open web proxies
 #
-# (c) Alexandr Savca, alexandr dot savca89 at gmail dot com
+# (c) 2020 Alexandr Savca, alexandr dot savca89 at gmail dot com
 
 use strict;
 use warnings;

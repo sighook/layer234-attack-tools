@@ -1,6 +1,8 @@
 #!/usr/bin/env perl
 # Description: Find the manufacturer by MAC address
 # Depends on:  aircrack-ng
+#
+# (c) 2020 Alexandr Savca, alexandr dot savca89 at gmail dot com
 
 use strict;
 use warnings;
