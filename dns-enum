@@ -1,5 +1,6 @@
 #!/bin/sh
-# Enumerate DNS hostnames by brute force guessing of common subdomains.
+# Description: Enumerate DNS hostnames by brute force guessing of common subdomains
+# Depends on:  nmap
 
 if [ -z $1 ] || [ -z $2 ]; then
     cat <<EOF
@@ -23,5 +24,5 @@ nmap $DEBUG \
     --script-args dns-brute.threads=$THREADS,dns-brute.hostlist=$2 \
     $1
 
-# vim:sw=4:ts=4:sts=4:et:cc=120
-# End of file
+# vim:sw=2:ts=2:sts=2:et:cc=72
+# End of file.
