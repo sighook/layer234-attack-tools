@@ -2,8 +2,8 @@
 # Description: Spoof ARP reply
 # Depends on:  scapy
 #
-# (c) volgk, github.com/volgk
-# modified by Alexandr Savca, alexandr dot savca89 at gmail dot com
+# (c) 2020 volgk, github.com/volgk
+# (c) 2022 Alexandr Savca, alexandr dot savca89 at gmail dot com
 
 from scapy.all import *
 
