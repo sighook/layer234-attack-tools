@@ -1,4 +1,5 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
+
 use strict;
 use warnings;
 use diagnostics;
@@ -20,19 +21,21 @@ $program - test reliability of open web proxies
 usage: $program [options] STDIN
 
 Options:
-  -h, --help                  show this help message and exit
-  -v, --version               show version and exit
-  -u, --user-agent  STR|FILE  set UA as user-agent
-  -t, --threads     NUMBER    set NUMBER of connection threads
-  -W, --show-white            show white proxies [default:0]
-  -G, --show-gray   0|1       show gray  proxies [default:1]
-  -O, --show-other  0|1       show proxies, whose IP addresses are different
-                              from the proxy IP when connecting [default:0]
-  -B, --show-bad    0|1       show proxies whose response is not 200 [default:0]
+  -h, --help                  Show this help message and exit.
+  -v, --version               Show version and exit.
+  -u, --user-agent  STR|FILE  Set UA as user-agent.
+  -t, --threads     NUMBER    Set NUMBER of connection threads.
+  -W, --show-white            Show white proxies. Default is 0.
+  -G, --show-gray   0|1       Show gray  proxies. Default is 1.
+  -O, --show-other  0|1       Show proxies, whose IP addresses are
+                              different from the proxy IP when
+                              connecting. Default is 0.
+  -B, --show-bad    0|1       Show proxies whose response is not 200.
+                              Default is 0.
 
 Examples:
-  wget http://spys.me/proxy.txt -qO- | grep-ipaddr-port > proxies.txt
-  $program < proxies.txt | grep-ipaddr-port
+  wget -qO- http://spys.me/proxy.txt | grep_ipaddr_port.sh > proxies.txt
+  $program < proxies.txt | grep_ipaddr_port.sh
 
 See also:
   http://www.google.com/search?q=+\":8080\" +\":3128\" +\":80\" filetype:txt
@@ -119,11 +122,14 @@ sub proxychk {
     }
 
     if ($r->{content} eq $myIP) {
-        print "$proxy $r->{status} -> myip\n"          if $OPTS{showWhite};
+        print "$proxy $r->{status} -> myip\n"
+            if $OPTS{showWhite};
     } elsif ($r->{content} eq $proxyIP) {
-        print "$proxy $r->{status} -> grey\n"          if $OPTS{showGray};
+        print "$proxy $r->{status} -> grey\n"
+            if $OPTS{showGray};
     } else {
-        print "$proxy $r->{status} -> $r->{content}\n" if $OPTS{showOther};
+        print "$proxy $r->{status} -> $r->{content}\n"
+            if $OPTS{showOther};
     }
 }
 
@@ -133,5 +139,5 @@ sub getmyip {
     $myIP = $r->{content};
 }
 
-# vim:sw=4:ts=4:sts=4:et:cc=80
-# End of file
+# vim:sw=4:ts=4:sts=4:et:tw=71:cc=72
+# End of file.
