@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Description: Spoof a DHCP server and exploit all clients vulnerable to the 'ShellShock'
+# Depends on:  scapy
 
 # Based on the PoC from
 # https://www.trustedsec.com/september-2014/shellshock-dhcp-rce-proof-concept/
@@ -111,5 +113,5 @@ def dhcp(resp):
 print( "[*] Waiting for a DISCOVER...")
 sniff(filter="udp and (port 67 or 68)", prn=dhcp, iface=args.iface)
 
-# vim:sw=4:ts=4:sts=4:et:cc=72
+# vim:sw=4:ts=4:sts=4:et:tw=71:cc=72
 # End of file.
