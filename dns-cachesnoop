@@ -1,7 +1,8 @@
 #!/usr/bin/env perl
+# Description: Performs DNS cache snooping against a DNS server
+# Depends on:  nmap p5-net-dns
 #
-# Performs DNS cache snooping against a DNS server.
-#
+# (c) 2020 Alexandr Savca, alexandr dot savca89 at gmail dot com
 
 use strict;
 use warnings;
