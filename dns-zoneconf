@@ -1,5 +1,7 @@
-#!/usr/bin/perl
-# Checks DNS zone configuration against best practices, including RFC 1912.
+#!/usr/bin/env perl
+# Description: Checks DNS zone configuration against best practices,
+#              including RFC 1912.
+# Depends on:  nmap p5-net-dns
 
 BEGIN { $|++ }
 
@@ -8,10 +10,10 @@ use warnings;
 use Net::DNS;
 
 my $hostname = shift or die <<EOF;
-Checks DNS zone configuration against best practices, including RFC 1912.
+Checks DNS zone configuration against best practices, including
+RFC 1912.
 
 Usage: $0 <HOSTNAME>
-
 EOF
 
 my $res  = Net::DNS::Resolver->new;
@@ -41,10 +43,13 @@ for my $nsd (@nsdnames) {
 
     print '-' x $hyphlen . "[ $nsd ]" . '-' x $hyphlen . "\n";
 
-    print qx(nmap -sn -Pn $nsd --script dns-check-zone --script-args='dns-check-zone.domain=$hostname');
+    print qx(
+        nmap -sn -Pn $nsd --script dns-check-zone \
+            --script-args='dns-check-zone.domain=$hostname'
+    );
 
     print "\n";
 }
 
-# vim:sw=4:ts=4:sts=4:et:cc=80
-# End of file
+# vim:sw=4:ts=4:sts=4:et:tw=71:cc=72
+# End of file.
