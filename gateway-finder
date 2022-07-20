@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-# gateway-finder - Tool to identify routers on the local LAN and paths to the Internet
+# Description: Identify routers on the local LAN and paths to the Net
+# Depends on:  scapy
+#
 # Copyright (C) 2011 pentestmonkey@pentestmonkey.net
 # 
 # This program is free software; you can redistribute it and/or modify
@@ -15,9 +17,9 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
-# This tool may be used for legal purposes only.  Users take full responsibility
-# for any actions performed using this tool.  If these terms are not acceptable to 
-# you, then do not use this tool.
+# This tool may be used for legal purposes only.  Users take full
+# responsibility for any actions performed using this tool.  If these terms are
+# not acceptable to you, then do not use this tool.
 # 
 # You are encouraged to send comments, improvements or suggestions to
 # me at pentestmonkey at pentestmonkey.net
@@ -215,3 +217,6 @@ else:
     filter="ip and not arp and ((icmp and icmp[0] = 11 and icmp[1] = 0) or (src host %s and (icmp or (tcp and port 80))))" % options.ip
     vprint("Child process sniffing on %s with filter '%s'" % (options.interface, filter))
     sniff(iface=options.interface, store = 0, filter=filter, prn=None, lfilter=lambda x: processreply(x))
+
+# vim:sw=4:ts=4:sts=4:et:tw=79:cc=80
+# End of file.
