@@ -10,15 +10,15 @@ Enjoy.
 
 | Name                   | Description                                                                        |
 | ---------------------- | ---------------------------------------------------------------------------------- |
-| arp-mac-spoof          | Perform CAM overflow attack on Layer2 switches.                                    |
-| arp-spoof-flood        | Spoof ARP reply.                                                                   |
-| dhcp-spoof-shock       | Spoof a DHCP server and exploit all clients vulnerable to the 'ShellSock' attacks. |
-| gateway-finder         | Identify routers on the local LAN and paths to the Net.                            |
-| icmp-spoof-reply       | ICMP spoof reply.                                                                  |
-| mac2manuf              | Find the manufacturer by MAC address.                                              |
-| magpie                 | Find LEAP/MSCHAPv2/PPP/PPTP/RADIUS sensitive data in pcap files.                   |
-| netxml-dump            | Dump aircrack's netxml output in pretty format.                                    |
-| traceroute-geoloc      | Traceroute to host with geolocation info.                                          |
+| arp_mac_spoof.py       | Perform CAM overflow attack on Layer2 switches.                                    |
+| arp_spoof_flood.py     | Spoof ARP reply.                                                                   |
+| dhcp_spoof_shock.py    | Spoof a DHCP server and exploit all clients vulnerable to the 'ShellSock' attacks. |
+| gateway_finder.py      | Identify routers on the local LAN and paths to the Net.                            |
+| icmp_spoof_reply.py    | ICMP spoof reply.                                                                  |
+| mac2manuf.pl           | Find the manufacturer by MAC address.                                              |
+| magpie.sh              | Find LEAP/MSCHAPv2/PPP/PPTP/RADIUS sensitive data in pcap files.                   |
+| netxml_dump.pl         | Dump aircrack's netxml output in pretty format.                                    |
+| traceroute_geoloc.sh   | Traceroute to host with geolocation info.                                          |
 
 ## Dependencies:
 
