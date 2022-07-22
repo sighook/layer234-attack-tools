@@ -3,7 +3,7 @@ Layer 2/3/4 attack tools
 
 ## Description:
 
-Set of tools and helpers for attacks on the 2, 3 and 4 levels of the OSI Model.
+Set of tools and helpers for attacks on the 2, 3 and 4 layers of the OSI Model.
 Some of them I adapted from the Net, some I wrote myself, some by [volgk](https://github.com/volgk).
 
 Enjoy.
