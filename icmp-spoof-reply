@@ -15,25 +15,25 @@
 from scapy.all import *
 
 def icmp_reply_spoof(interface):
-    def spoof(request):
-        if request.haslayer('ICMP') and request[ICMP].type == 8:
-            print(f"ICMP request from {request[IP].src} to {request[IP].dst}")
-            response = Ether()/IP()/ICMP()/""
+    def spoof(req):
+        if req.haslayer('ICMP') and req[ICMP].type == 8:
+            print(f"ICMP req from {req[IP].src} to {req[IP].dst}")
+            resp = Ether()/IP()/ICMP()/""
 
-            response[Ether].dst = request[Ether].src
-            response[Ether].src = request[Ether].dst
+            resp[Ether].dst = req[Ether].src
+            resp[Ether].src = req[Ether].dst
 
-            response[IP].src    = request[IP].dst
-            response[IP].dst    = request[IP].src
+            resp[IP].src    = req[IP].dst
+            resp[IP].dst    = req[IP].src
 
-            response[ICMP].type = 0
-            response[ICMP].id   = request[ICMP].id
-            response[ICMP].seq  = request[ICMP].seq
+            resp[ICMP].type = 0
+            resp[ICMP].id   = req[ICMP].id
+            resp[ICMP].seq  = req[ICMP].seq
 
-            response[Raw].load  = request[Raw].load
+            resp[Raw].load  = req[Raw].load
 
-            print(f"ICMP response to {response[IP].dst} as {response[IP].src}")
-            sendp(response, iface=interface)
+            print(f"ICMP resp to {resp[IP].dst} as {resp[IP].src}")
+            sendp(resp, iface=interface)
 
     sniff(prn=spoof, iface=interface)
 
@@ -65,7 +65,7 @@ if __name__ == '__main__':
         interface = get_working_if()
 
     if os.getuid() != 0:
-        print ("Must be superuser.")
+        print("Must be superuser.")
         sys.exit(1)
 
     icmp_reply_spoof(interface)
