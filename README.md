@@ -31,6 +31,6 @@ Enjoy.
 ## See also
 
 - [yersinia](https://github.com/tomac/yersinia) - Framework for layer 2 attacks.
-- [layer567_attack_tools](https://github.com/chinarulezzz/layer567_attack_tools) - Layer 5, 6 and 7 attack tools.
+- [layer567-attack-tools](https://github.com/chinarulezzz/layer567-attack-tools) - Layer 5, 6 and 7 attack tools.
 
 <!-- End of file. -->
