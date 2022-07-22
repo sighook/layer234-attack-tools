@@ -19,7 +19,6 @@ Enjoy.
 | magpie                 | Find LEAP/MSCHAPv2/PPP/PPTP/RADIUS sensitive data in pcap files.                   |
 | netxml-dump            | Dump aircrack's netxml output in pretty format.                                    |
 | traceroute-geolocation | Traceroute to host with geolocation info.                                          |
-| ---------------------- | ---------------------------------------------------------------------------------- |
 
 ## Dependencies:
 
